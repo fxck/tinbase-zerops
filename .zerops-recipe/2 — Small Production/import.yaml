@@ -1,12 +1,12 @@
 #zeropsPreprocessor=on
 
-# Small Production — one tinbase container on a SERIOUS core with vertical
+# Small Production — one tinbase container with 1–16 GB vertical
 # autoscaling, plus a single-node managed Postgres. For redundancy + horizontal
 # scale use the HA Production tier.
 
 project:
   name: tinbase-prod
-  corePackage: SERIOUS
+  corePackage: LIGHT
   envVariables:
     TINBASE_JWT_SECRET: <@generateRandomString(<48>)>
 
