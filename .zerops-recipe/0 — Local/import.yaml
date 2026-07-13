@@ -1,0 +1,16 @@
+#zeropsPreprocessor=on
+
+# Local — the managed database only. Run tinbase on your own machine against it over
+# the Zerops VPN (`zcli vpn up`): DATABASE_URL pointed at db's superuser connection.
+
+project:
+  name: tinbase-local
+  corePackage: LIGHT
+  envVariables:
+    TINBASE_JWT_SECRET: <@generateRandomString(<48>)>
+
+services:
+  - hostname: db
+    type: postgresql:single@17
+    priority: 10
+    profile: oltp-hobby

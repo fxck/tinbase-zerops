@@ -1,0 +1,29 @@
+#zeropsPreprocessor=on
+
+# Small Production — one tinbase container on a SERIOUS core with vertical
+# autoscaling, plus a single-node managed Postgres. For redundancy + horizontal
+# scale use the HA Production tier.
+
+project:
+  name: tinbase-prod
+  corePackage: SERIOUS
+  envVariables:
+    TINBASE_JWT_SECRET: <@generateRandomString(<48>)>
+
+services:
+  - hostname: db
+    type: postgresql:single@17
+    priority: 10
+    profile: oltp-staging
+
+  - hostname: tinbase
+    type: nodejs@22
+    priority: 5
+    buildFromGit: https://github.com/fxck/tinbase-zerops
+    zeropsSetup: tinbase
+    enableSubdomainAccess: true
+    minContainers: 1
+    maxContainers: 1
+    verticalAutoscaling:
+      minRam: 1
+      maxRam: 16
