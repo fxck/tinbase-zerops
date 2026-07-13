@@ -1,0 +1,12 @@
+{
+  "name": "tinbase-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The tinbase backend (Supabase-compatible API + Studio) running against a managed Postgres.",
+  "scripts": {
+    "start": "tinbase start"
+  },
+  "dependencies": {
+    "tinbase": "0.10.0"
+  }
+}

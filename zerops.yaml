@@ -1,0 +1,29 @@
+zerops:
+  # The tinbase backend, deployed as its own service. It runs the real tinbase
+  # against the managed `db` (DATABASE_URL) and serves the Supabase API + Studio
+  # on its own subdomain. No app code of ours lives here — this IS tinbase.
+  - setup: tinbase
+    build:
+      base: nodejs@22
+      buildCommands:
+        - npm install
+      deployFiles:
+        - .
+      cache:
+        - node_modules
+    run:
+      base: nodejs@22
+      os: ubuntu
+      ports:
+        - port: 3000
+          httpSupport: true
+      envVariables:
+        # Superuser connection — tinbase bootstraps the anon/authenticated/
+        # service_role roles, which needs CREATEROLE. tinbase reads DATABASE_URL
+        # from the env directly. TINBASE_JWT_SECRET is a project-level var.
+        DATABASE_URL: postgresql://${db_superUser}:${db_superUserPassword}@${db_hostname}:${db_port}/${db_dbName}
+      start: ./node_modules/.bin/tinbase start --host 0.0.0.0 --port 3000
+      healthCheck:
+        httpGet:
+          port: 3000
+          path: /_/
